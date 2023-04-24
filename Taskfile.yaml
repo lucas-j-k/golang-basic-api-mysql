@@ -1,0 +1,41 @@
+# https://taskfile.dev
+
+version: '3'
+
+dotenv: [".env"]
+
+tasks:
+
+    # MySQL docker management
+    buildsql:
+        desc: Build MYSQL image in Docker
+        cmds:
+        - docker build --tag 'go-mysql' .
+    runsql:
+        desc: Start MYSQL in Docker
+        cmds:
+        - docker run --name go-mysql -e MYSQL_ROOT_PASSWORD="$SQLPASS" -p 3306:3306 --detach go-mysql
+    killsql:
+        desc: Stop and remove the MySQL container
+        cmds:
+        - docker stop go-mysql && docker rm go-mysql
+    sqlcli:
+        desc: CLI into MYSQL inside Docker
+        cmds:
+        - docker exec -it go-mysql mysql -p
+
+    # Golang app management
+    run: 
+        desc: Run the Go rest api server
+        cmds:
+        - GOFLAGS=-mod=mod go run main.go 
+    build:
+        desc: Build Go executable of API
+        cmds:
+        - GOFLAGS=-mod=mod go build -o bin/go-articles-api main.go 
+
+    # HTTP
+    ping:
+        desc: Ping the server locally to test response
+        cmds:
+        - curl "localhost:$PORT"/ping
