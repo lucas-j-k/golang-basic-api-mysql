@@ -14,7 +14,7 @@ tasks:
     runsql:
         desc: Start MYSQL in Docker
         cmds:
-        - docker run --name go-mysql -e MYSQL_ROOT_PASSWORD="$SQLPASS" -p 3306:3306 --detach go-mysql
+        - docker run --name go-mysql -e MYSQL_ROOT_PASSWORD="$SQL_PASS" -p 3306:3306 --detach go-mysql
     killsql:
         desc: Stop and remove the MySQL container
         cmds:
